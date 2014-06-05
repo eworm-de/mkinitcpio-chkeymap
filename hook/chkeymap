@@ -2,15 +2,15 @@
 
 run_latehook() {
 	local newroot="/new_root/"
-	
+
 	if [[ "${keymap}" = "interactive" ]]; then
 		echo
 		echo -n "Please give keymap to use: "
 		read keymap
 	fi
 	msg ":: Setting keymap for main system to '${keymap}'..."
-	sed -i "/^KEYMAP=/c KEYMAP=\"${keymap}\"" "${newroot}/etc/vconsole.conf"
-	sed -i "/XkbLayout/c Option \"XkbLayout\" \"${keymap}\"" "${newroot}/etc/X11/xorg.conf.d/05-keymap.conf"
+	sed -i "/^KEYMAP=/c KEYMAP=${keymap}" "${newroot}/etc/vconsole.conf"
+	sed -i "/XkbLayout/c Option \"XkbLayout\" \"${keymap}\"" "${newroot}/etc/X11/xorg.conf.d/00-keyboard.conf"
 
 	if [[ "${timezone}" = "interactive" ]]; then
 		echo

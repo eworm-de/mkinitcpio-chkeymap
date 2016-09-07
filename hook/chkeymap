@@ -8,18 +8,24 @@ run_latehook() {
 		echo -n "Please give keymap to use: "
 		read keymap
 	fi
-	msg ":: Setting keymap for main system to '${keymap}'..."
-	sed -i "/^KEYMAP=/c KEYMAP=${keymap}" "${newroot}/etc/vconsole.conf"
-	sed -i "/XkbLayout/c Option \"XkbLayout\" \"${keymap}\"" "${newroot}/etc/X11/xorg.conf.d/00-keyboard.conf"
+	if [[ -n "${keymap}" ]]; then
+		msg ":: Setting keymap for main system to '${keymap}'..."
+		sed -i "/^KEYMAP=/c KEYMAP=${keymap}" \
+			"${newroot}/etc/vconsole.conf"
+		sed -i "/XkbLayout/c Option \"XkbLayout\" \"${keymap}\"" \
+			"${newroot}/etc/X11/xorg.conf.d/00-keyboard.conf"
+	fi
 
 	if [[ "${timezone}" = "interactive" ]]; then
 		echo
 		echo -n "Please give timezone to use: "
 		read timezone
 	fi
-	if [[ -z "${timezone}" ]] || [[ ! -e "${newroot}/usr/share/zoneinfo/${timezone}" ]]; then
-		timezone="UTC"
+	if [[ -n "${timezone}" ]]; then
+		if [[ ! -e "${newroot}/usr/share/zoneinfo/${timezone}" ]]; then
+			timezone="UTC"
+		fi
+		msg ":: Setting timezone for main system to '${timezone}'..."
+		ln -sf "/usr/share/zoneinfo/${timezone}" "${newroot}/etc/localtime"
 	fi
-	msg ":: Setting timezone for main system to '${timezone}'..."
-	ln -sf "/usr/share/zoneinfo/${timezone}" "${newroot}/etc/localtime"
 }

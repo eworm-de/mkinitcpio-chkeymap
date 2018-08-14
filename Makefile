@@ -15,5 +15,5 @@ install:
 
 release:
 	git archive --format=tar.xz --prefix=mkinitcpio-chkeymap-$(VERSION)/ $(VERSION) > mkinitcpio-chkeymap-$(VERSION).tar.xz
-	gpg -ab mkinitcpio-chkeymap-$(VERSION).tar.xz
-	git notes --ref=refs/notes/signatures/tar add -C $$(git archive --format=tar --prefix=mkinitcpio-chkeymap-$(VERSION)/ $(VERSION) | gpg --armor --detach-sign | git hash-object -w --stdin) $(VERSION)
+	gpg --armor --detach-sign --comment mkinitcpio-chkeymap-$(VERSION).tar.xz mkinitcpio-chkeymap-$(VERSION).tar.xz
+	git notes --ref=refs/notes/signatures/tar add -C $$(git archive --format=tar --prefix=mkinitcpio-chkeymap-$(VERSION)/ $(VERSION) | gpg --armor --detach-sign --comment mkinitcpio-chkeymap-$(VERSION).tar | git hash-object -w --stdin) $(VERSION)
